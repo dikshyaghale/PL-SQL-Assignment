@@ -1,0 +1,231 @@
+--@D:\Year2\term2\CSY2038_Scripts\insert_19.txt
+
+/*
+Assignment
+Group 19
+
+UON ID:
+18413701-SHIVANI PURWAR
+18406490-DIKSHYA GHALE
+18408450-PRAGYAN KARKI
+18406494-RITESH JHA
+
+*/
+
+
+--inserting into Object table addresses
+INSERT INTO addresses (street,city,country)
+VALUES ('JYATHA STREET' , 'THAMEL' , 'KATHMANDU');
+
+INSERT INTO addresses(street,city,country)
+VALUES ('KALAN', 'BIRGUNJ' , 'UK');
+
+INSERT INTO addresses(street, city, country)
+VALUES ('BASIN' , 'AMSTERDAM' , 'US');
+
+INSERT INTO addresses(street, city, country)
+VALUES ('ME STREET', 'CALIFORNIA', 'US');
+
+INSERT INTO addresses(street , city, country)
+VALUES ('23 HOUSE' , 'BEIZING' , 'CHINA');
+
+INSERT INTO addresses(street , city, country)
+VALUES ('FREAK ST. BASANTAPUR' , 'KATHMANDU' , 'NEPAL');
+
+INSERT INTO addresses(street , city, country)
+VALUES ('TRIPURESHOWER' , 'KATHMANDU' , 'NEPAL');
+
+
+-- another way of inserting into object table address 
+INSERT INTO addresses
+VALUES ('GAUSALA' , 'KATHMANDU' , 'NEPAL');
+
+INSERT INTO addresses
+VALUES ('JORPATI' , 'HULAS' , 'AUSTRALIA');
+
+INSERT INTO addresses
+VALUES ('WHITE HOUSE' , 'WASHINGTON DC' , 'AMERICA');
+
+INSERT INTO addresses
+VALUES('BUSAN' , 'SEOUL' , 'KOREA');
+
+INSERT INTO addresses
+VALUES ('TAIPEI 33' , 'TOKYO' , 'JAPAN');
+
+-- 14 rows created in table addresses;
+
+--insert in table patrons
+INSERT INTO patrons (patron_id, patron_firstname, patron_middlename, patron_surname,
+patron_email, contact_no, p_gender, contract_date, investment,address)
+SELECT seq_patrons.NEXTVAL, 'RAMESH' , 'RAJ' , 'SHARMA', 'Rames@.com','123457' , 'M' , '12-JAN-2019',
+	investment_table_type(
+		investment_type('1-JAN-2019' , '7-JAN-2019' , 14500.60),
+		investment_type('15-FEB-2019' , '21-FEB-2019' , 20000.70)),
+	REF(a) FROM addresses a
+WHERE a.street = 'BUSAN';
+		
+--formatting the column
+COLUMN address FORMAT A50;
+COLUMN investment FORMAT A25;
+
+
+INSERT INTO patrons (patron_id, patron_firstname,patron_middlename,patron_surname,patron_email,contact_no,p_gender,contract_date, investment,address)
+SELECT seq_patrons.NEXTVAL, 'SURESH' , 'KUMAR' , 'PURWAR' , 'SURESH@.com' , '986574321' , 'M' , '20-FEB-2019' ,
+	investment_table_type( 
+		investment_type('20-FEB-2019' , '27-FEB-2019' , 6500.56),
+		investment_type('1-JUN-2018' , '7-JUN-2018' , 5500.98)),
+		REF(a) FROM addresses a
+		WHERE a.street = 'WHITE HOUSE';
+
+
+
+INSERT INTO patrons (patron_id, patron_firstname,patron_middlename,patron_surname,patron_email,contact_no,p_gender,contract_date, investment,address)
+SELECT seq_patrons.NEXTVAL, 'SIMRAN' , 'KUMARI' , 'PATEL' , 'SIMRAN@.com' , '986578963' , 'F' , '20-OCT-2019' ,
+	investment_table_type( 
+		investment_type('20-JUN-2019' , '27-JUN-2019' , 6550.56),
+		investment_type('1-DEC-2018' , '7-DEC-2018' , 5550.98)),
+		REF(a) FROM addresses a
+		WHERE a.street = 'TAIPEI 33';
+
+
+
+INSERT INTO patrons(patron_id, patron_firstname,patron_middlename,patron_surname,patron_email,contact_no,p_gender,contract_date, investment,address)
+ SELECT seq_patrons.NEXTVAL, 'SUMAN' , 'DEVI' , 'PORWAL' , 'SUMRAN@.com' , '98650986' , 'F' , '10-DEC-2019' ,
+	investment_table_type( 
+		investment_type('10-JUN-2019' , '17-JUN-2019' , 10000.56),
+		investment_type('17-MARCH-2017' , '27-MARCH-2017' , 9550.98)),
+		REF(a) FROM addresses a
+		WHERE a.street = 'JYATHA STREET';
+
+
+INSERT INTO patrons(patron_id, patron_firstname,patron_surname,patron_email,contact_no,p_gender,contract_date, investment,address)
+SELECT seq_patrons.NEXTVAL, 'SHIVANI' , 'PORWAL' , 'Sibu@.com' , '9865743146' , 'F' , '10-OCT-2015' ,
+	investment_table_type( 
+		investment_type('10-JUN-2015' , '27-JUN-2015' , 1000.56),
+		investment_type('17-JULY-2017' , '27-JULY-2017' , 19550.98)),
+		REF(a) FROM addresses a
+		WHERE a.street = 'FREAK ST. BASANTAPUR';
+
+
+
+--formatting the column
+COLUMN patron_id FORMAT 9999;
+COLUMN patron_firstname FORMAT A10;
+COLUMN patron_middlename FORMAT A10;
+COLUMN patron_surname FORMAT A10;
+COLUMN address FORMAT A10;
+COLUMN investment FORMAT A10;
+COLUMN patron_email FORMAT A10;
+COLUMN contract_date FORMAT A20;
+
+
+--inserting into festival_nature
+INSERT INTO festival_nature(festival_nature_id,budget,nature,entertainment)
+VALUES (seq_festival_nature.NEXTVAL, 120000,'FILMY FESTIVALS',
+	entertainment_varray_type(
+		entertainment_type('ACTING COMPITATION' , 'FLIMY SONGS' , 'CLASSIC', 'PRICE')));
+		
+
+INSERT INTO festival_nature(festival_nature_id,budget,nature,entertainment)
+VALUES (seq_festival_nature.NEXTVAL, 130000,'CONCERT FESTIVAL',
+	entertainment_varray_type(
+		entertainment_type('KITTING_BALLONS' , 'PARTY SONGS' , 'PARTY DANCE', '')));
+		
+
+INSERT INTO festival_nature(festival_nature_id,budget,nature,entertainment)
+VALUES (seq_festival_nature.NEXTVAL, 140000,'ART FESTIVAL',
+	entertainment_varray_type(
+		entertainment_type('RANGOLI COMPETITION' , 'ARATI SONGS' , 'TRADITIONAL', 'PRICE')));
+
+
+INSERT INTO festival_nature(festival_nature_id,budget,nature,entertainment)
+VALUES (seq_festival_nature.NEXTVAL, 160000,'RELIGIUOS FESTIVALS',
+	entertainment_varray_type(
+		entertainment_type('PLAYING CARDS' , 'LOK DOHARI' , 'LOK DANCE', '')));
+
+
+INSERT INTO festival_nature(festival_nature_id,budget,nature,entertainment)
+VALUES (seq_festival_nature.NEXTVAL, 160000,'SEASONAL FESTIVAL',
+	entertainment_varray_type(
+		entertainment_type('PLAYING COLORS' , 'BOLLYWOOD SONGS' , 'PANI DANCE', 'MORE..')));
+		
+
+COLUMN entertainment FORMAT A25;
+
+
+--insert into table loctation
+INSERT INTO locations(location_id, location_name , description,venue)
+VALUES(seq_locations.NEXTVAL,'GARDEN PARK', 'THIS HOLI FESTIVALS WITH ALL BEAUTIFUL COLORS AND LOVE AT 10:30 NEAR BANESHOWER IN GARDEN PARK',
+	address_type('BAUDHA' , 'KATHMANDU' , 'NEPAL'));
+
+INSERT INTO locations(location_id, location_name , description,venue)
+VALUES(seq_locations.NEXTVAL,'CHOVAR DADA', 'THIS KISHANA ASTMI WITH ALL BEAUTIFUL RADHA AND KIRSHNA  AT 10:30 NEAR KIRITIPUR IN CHOVAR DADA',
+	address_type('KIRITIPUR' , 'KATHMANDU' , 'NEPAL'));
+
+INSERT INTO locations(location_id, location_name , description,venue)
+VALUES(seq_locations.NEXTVAL,'GAUSALA', 'THIS DIPALI IN PASUPATI WITH YOUR LOVELY WISH AND DIYO ALL AROUND AT EVERNIG 6:30',
+	address_type('GAUSALA' , 'KATHMANDU' , 'NEPAL'));
+
+INSERT INTO locations(location_id, location_name , description,venue)
+VALUES(seq_locations.NEXTVAL,'FREAK ST. BASANTAPUR', 'LETS HAVE HAPPY FRIDAY IN BASTAPUR WITH ROCK CLUB',
+	address_type('FREAK ST. BASANTAPUR' , 'KATHMANDU' , 'NEPAL'));
+
+INSERT INTO locations(location_id, location_name , description,venue)
+VALUES(seq_locations.NEXTVAL,'TRIPURESHOWER', 'HEY GYUS LETS MAKE THE FIRST DAY OF YOUR NEW YEAR UNFORGETTABLE WITH US AND THE YOUR FAB ACTORS AND SINGER IN SAME STAGE',
+	address_type('SHANTI TOLL' , 'BESISHAHAR' , 'KOREA'));
+
+INSERT INTO locations(location_id)
+VALUES(seq_locations.NEXTVAL);
+
+--INSERT INTO TABEL FESTIVALS
+INSERT INTO festivals(location_id,festival_nature_id, festival_name , festival_date)
+VALUES(1001,1002, 'HOLI' ,'20-JUN-2019'); 
+
+INSERT INTO festivals(location_id,festival_nature_id,festival_name , festival_date)
+VALUES(1002,1004, 'KISHANA_ASTMI' ,'20-APRIL-2019'); 
+
+INSERT INTO festivals(location_id,festival_nature_id,festival_name , festival_date)
+VALUES(1003,1006, 'DIPAWALI' ,'30-MARCH-2019'); 
+
+INSERT INTO festivals(location_id,festival_nature_id,festival_name , festival_date)
+VALUES(1004,1008, 'CONCERT' ,'26-OCT-2019'); 
+
+-- INSERT INTO TABLE TICKETS;
+INSERT INTO tickets(patron_id,sold_tickets ,festival_nature_id,location_id, buying_method_used)
+VALUES(101, 2,1002,1001, 
+	ticket_varray_type(
+		ticket_type('ONLINE','LALLU',21,50)));
+
+
+INSERT INTO tickets( patron_id ,sold_tickets, festival_nature_id,location_id, buying_method_used)
+VALUES(101, 5, 1004, 1002,
+	ticket_varray_type(
+		ticket_type('CASH','BAJAJ',24,50)));
+
+INSERT INTO tickets( patron_id ,sold_tickets, festival_nature_id,location_id, buying_method_used)
+VALUES(102, 3, 1004, 1002,
+	ticket_varray_type( 
+		ticket_type('CASH','MAYA',8,25)));
+
+INSERT INTO tickets( patron_id ,sold_tickets, festival_nature_id,location_id,buying_method_used)
+VALUES(103, 10, 1008,1004, 
+	ticket_varray_type(
+		ticket_type('ONLINE','ANKIT',29,50)));
+
+INSERT INTO tickets( patron_id ,sold_tickets, festival_nature_id,location_id,buying_method_used)
+VALUES(104, 20, 1002,1001, 
+	ticket_varray_type(
+		ticket_type('CASH','SANGITA',26,200)));
+
+
+INSERT INTO tickets( patron_id , sold_tickets, festival_nature_id,location_id, buying_method_used)
+VALUES(102,5, 1002, 1001,
+ticket_varray_type(
+ticket_type('CHEQUE','NIBESH',27,300)));
+
+
+INSERT INTO tickets( patron_id ,sold_tickets, festival_nature_id,location_id, buying_method_used)
+VALUES(104,7, 1004, 1002,
+ticket_varray_type(
+ticket_type('CHEQUE','DAVID',20,250)));
+

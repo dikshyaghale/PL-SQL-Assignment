@@ -1,0 +1,146 @@
+
+--@D:\Year2\term2\CSY2038_Scripts\cursor_19.txt
+/*
+Assignment
+Group 19
+
+UON ID:
+18413701-SHIVANI PURWAR
+18406490-DIKSHYA GHALE
+18408450-PRAGYAN KARKI
+18406494-RITESH JHA
+
+
+*/
+SET SEVEROUTPUT ON;
+--cursor 1
+--creating procedure using implicit cursor that deleted the festival if there exists the name of festival as per the input passed through parameter
+
+CREATE OR REPLACE PROCEDURE proc_implicit_cursor(in_festival_name festivals.festival_name%TYPE) IS
+BEGIN
+	DELETE FROM festivals WHERE festival_name = in_festival_name;
+	IF(SQL%FOUND) THEN
+		DBMS_OUTPUT.PUT_LINE('DELETED ' ||in_festival_name);
+	ELSE 
+		DBMS_OUTPUT.PUT_LINE('NO SUCH FESTIVAL');
+	END IF;
+END proc_implicit_cursor;
+/
+SHOW ERRORS;
+
+--formatting column
+COLUMN description FORMAT A30;
+
+--cursor 2
+--creating cursor named proc_exp_cursor that returns the named and id of the location
+CREATE OR REPLACE PROCEDURE proc_exp_cursor AS
+	in_location_id locations.location_id%TYPE;
+	in_location_name locations.location_name%TYPE;
+	in_location_street VARCHAR2(20);
+	
+	CURSOR cur_locations IS
+	
+	SELECT l.location_id,l.location_name,l.venue.city city
+	FROM locations l;
+	
+BEGIN
+	OPEN cur_locations;
+	DBMS_OUTPUT.PUT_LINE('SN Location_name City');
+	DBMS_OUTPUT.PUT_LINE('-------------------------------------');
+	LOOP
+		FETCH  cur_locations INTO in_location_id,in_location_name,in_location_street;
+		EXIT WHEN cur_locations%NOTFOUND;
+		
+		DBMS_OUTPUT.PUT_LINE(in_location_id||' '||in_location_name ||' '||in_location_street);
+		END LOOP;
+	CLOSE cur_locations;
+END proc_exp_cursor;
+/
+SHOW ERRORS;
+
+
+--CURSOR 3
+--creating cursor using nested table that returns the value as per the amount passed through parameter
+CREATE OR REPLACE PROCEDURE proc_patron_amount(in_amount NUMBER) IS
+CURSOR cur_amount IS
+
+SELECT p.patron_firstname,i.amount
+FROM patrons p,
+TABLE (p.investment) i
+WHERE i.amount>=in_amount;
+
+vn_rows NUMBER(3);
+
+BEGIN
+	DBMS_OUTPUT.PUT_LINE('SN firstname amount');
+	DBMS_OUTPUT.PUT_LINE('------------------------------------');
+	
+	FOR rec_cur_amount IN cur_amount LOOP
+		DBMS_OUTPUT.PUT_LINE(cur_amount%ROWCOUNT || '  '|| rec_cur_amount.patron_firstname ||'  '||rec_cur_amount.amount);
+		vn_rows :=cur_amount%ROWCOUNT;
+		
+		END LOOP;
+		
+		DBMS_OUTPUT.PUT_LINE('THERE ARE '|| vn_rows|| ' ROWS');
+END proc_patron_amount;
+/
+SHOW ERRORS;
+	
+--cursor 4
+--creating cursor named cur_join that returns the values from two tables
+CREATE OR REPLACE PROCEDURE proc_exp_join IS
+CURSOR cur_join IS
+
+	SELECT l.venue.country country,l.venue.city city,f.festival_name,f.festival_date
+		FROM locations l
+		RIGHT JOIN festivals f
+		ON l.location_id = f.location_id;
+
+		vn_rows NUMBER(3);
+
+BEGIN
+	DBMS_OUTPUT.PUT_LINE('SN COUNTRY CITY FESTIVAL_NAME FESTIVAL_DATE');
+	DBMS_OUTPUT.PUT_LINE('------------------------------------');
+	
+	FOR rec_cur_join IN cur_join LOOP
+		DBMS_OUTPUT.PUT_LINE(cur_join%ROWCOUNT || '  '|| rec_cur_join.country ||'  '||rec_cur_join.city||' '||rec_cur_join.festival_name||' '||rec_cur_join.festival_date);
+		vn_rows :=cur_join%ROWCOUNT;
+		
+	END LOOP;
+END proc_exp_join;
+/
+SHOW ERRORS;
+
+
+--cursor 5
+--creating cursor named proc_festival_nature which returns the number of rows along with its values as per the value passed through parameter
+CREATE OR REPLACE PROCEDURE proc_festival_nature(in_budget IN festival_nature.budget%TYPE) IS
+CURSOR cur_budget IS
+	SELECT nature, budget 
+	FROM festival_nature
+	WHERE budget>=in_budget;
+
+rec_cur_budget cur_budget%ROWTYPE;
+
+BEGIN
+
+	OPEN cur_budget;
+	
+	FETCH cur_budget INTO rec_cur_budget;
+	
+	IF cur_budget%NOTFOUND THEN
+		DBMS_OUTPUT.PUT_LINE('NO SUCH BUDGET');
+	ELSE
+		WHILE cur_budget%FOUND LOOP
+			
+			DBMS_OUTPUT.PUT_LINE(rec_cur_budget.nature || ' '|| rec_cur_budget.budget);
+		FETCH cur_budget INTO rec_cur_budget;
+		
+		END LOOP;
+	END IF;
+END proc_festival_nature;
+/
+--no errors
+
+
+

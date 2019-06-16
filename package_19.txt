@@ -1,0 +1,73 @@
+
+--@D:\Year2\term2\CSY2038_Scripts\package_19.txt
+
+/*
+Assignment
+Group 19
+
+UON ID:
+18413701-SHIVANI PURWAR
+18406490-DIKSHYA GHALE
+18408450-PRAGYAN KARKI
+18406494-RITESH JHA
+
+
+*/
+SET SEVEROUTPUT ON;
+
+--PACKAGE 1
+--creating package to fetchout the patrons name with given id respectively
+CREATE OR REPLACE PACKAGE search_name IS
+PROCEDURE proc_firstname(in_id patrons.patron_id%TYPE);
+PROCEDURE proc_lastname(in_id patrons.patron_id%TYPE);
+--PROCEDURE proc_first_last(in_id patrons.patron_id%TYPE,in_id patrons.patron_id%TYPE);
+END search_name;
+/
+CREATE OR REPLACE PACKAGE BODY search_name IS
+	PROCEDURE proc_firstname(in_id patrons.patron_id%TYPE) IS
+	p_name patrons.patron_firstname%TYPE;
+	vn_length NUMBER(3);
+	vn_counter NUMBER(3) :=1;
+	
+	BEGIN
+		SELECT patron_firstname INTO p_name
+		FROM patrons
+		WHERE patron_id = in_id;
+		vn_length := LENGTH(p_name);
+		WHILE vn_counter <= vn_length LOOP
+		
+			DBMS_OUTPUT.PUT_LINE(SUBSTR(p_name,vn_counter,1));
+			vn_counter := vn_counter + 1;
+		END LOOP;
+	END proc_firstname;
+	
+	PROCEDURE proc_lastname(in_id patrons.patron_id%TYPE) IS
+	p_last patrons.patron_surname%TYPE;
+	vn_length NUMBER(3);
+	vn_counter NUMBER(3) :=1;
+	
+	BEGIN
+		SELECT patron_surname INTO p_last
+		FROM patrons
+		WHERE patron_id = in_id;
+		vn_length := LENGTH(p_last);
+		WHILE vn_counter <= vn_length LOOP
+		
+			DBMS_OUTPUT.PUT_LINE(SUBSTR(p_last,vn_counter,1));
+			vn_counter := vn_counter + 1;
+		END LOOP;
+	END proc_lastname;
+
+END search_name;
+/
+
+
+
+
+
+
+
+
+
+
+	

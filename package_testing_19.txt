@@ -1,0 +1,38 @@
+--@D:\Year2\term2\CSY2038_Scripts\package_testing_19.txt
+
+/*
+Assignment
+Group 19
+
+UON ID:
+18413701-SHIVANI PURWAR
+18406490-DIKSHYA GHALE
+18408450-PRAGYAN KARKI
+18406494-RITESH JHA
+
+
+*/
+
+--TESTING 1
+--testing pakage serach name by id
+EXEC search_name.proc_firstname(101);
+/*
+S
+U
+R
+E
+S
+H
+*/
+EXEC search_name.proc_lastname(101);
+/*
+P
+U
+R
+W
+A
+R
+
+*/
+
+

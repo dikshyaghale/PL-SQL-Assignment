@@ -1,0 +1,310 @@
+--@D:\Year2\term2\CSY2038_Scripts\drop_19.txt
+
+/*
+Assignment
+Group 19
+
+UON ID:
+18413701-SHIVANI PURWAR
+18406490-DIKSHYA GHALE
+18408450-PRAGYAN KARKI
+18406494-RITESH JHA
+
+
+*/
+-- drop unique constraints
+
+--dropping unique constraints for patrons
+ALTER TABLE patrons
+DROP CONSTRAINT uk_p_contact;
+--table altered
+
+
+--dropping unique constraint named uk_p_email
+ALTER TABLE patrons
+DROP CONSTRAINT uk_p_email;
+--table altered
+
+--dropping check constraints
+
+--dropping constraint named ck_p_firstname
+ALTER TABLE patrons
+DROP CONSTRAINT ck_p_firstname;
+--table altered
+
+
+--dropping constraint named  ck_f_festival
+ALTER TABLE festivals
+DROP CONSTRAINT ck_f_festival;
+--table altered
+
+
+--dropping constraint named ck_p_gender
+ALTER TABLE patrons
+DROP CONSTRAINT ck_p_gender;
+--table altered
+
+
+--dropping FKs
+
+--dropping the foreign key named fk_t_patrons
+ALTER TABLE tickets
+DROP CONSTRAINT fk_t_patrons;
+--table altered
+
+
+--to drop the fk named fk_t_festivals
+ALTER TABLE tickets
+DROP CONSTRAINT fk_t_festivals;
+--table altered
+
+
+--dropping the constraint named fk_f_festival_nature
+ALTER TABLE festivals
+DROP CONSTRAINT fk_f_festival_nature;
+--table altered
+
+
+--to drop the constraint named fk_f_locations
+ALTER TABLE festivals
+DROP CONSTRAINT fk_f_locations;
+--table altered
+
+
+--dropping PKs
+--dropping pk named pk_tickets
+ALTER TABLE tickets
+DROP CONSTRAINT pk_tickets;
+--table altered
+
+
+--dropping primary key named pk_festivals
+ALTER TABLE festivals
+DROP CONSTRAINT pk_festivals;
+--table altered
+
+
+--dropping primary key named pk_locations
+ALTER TABLE locations
+DROP CONSTRAINT pk_locations;
+--table altered
+
+
+--drop pk named pk_festival_nature
+ALTER TABLE festival_nature
+DROP CONSTRAINT pk_festival_nature;
+--table altered
+
+
+--drop pk named pk_patrons
+ALTER TABLE patrons
+DROP CONSTRAINT pk_patrons;
+--table altered
+
+
+--dropping sequences
+
+DROP SEQUENCE seq_festival_nature;
+--sequence dropped
+
+
+DROP SEQUENCE seq_locations;
+--sequence dropped
+
+
+DROP SEQUENCE seq_patrons;
+--sequence dropped
+
+
+--DROPPING PROCEDURES
+
+--dropping procedure named proc_name_runtime
+DROP PROCEDURE proc_name_runtime;
+--procedure dropped
+
+--dropping procedure named proc_insert_festival_nature
+DROP PROCEDURE proc_insert_festival_nature;
+--procedure dropped
+
+--dropping procedure named proc_delt_festival_nature
+DROP PROCEDURE proc_delt_festival_nature;
+--procedure dropped
+
+--dropping procedure named proc_lower
+DROP PROCEDURE proc_lower;
+--procedure dropped
+
+--drop procedure proc_update
+DROP PROCEDURE proc_update;
+--procedure dropped
+
+--dropping procedure named proc_continue
+DROP PROCEDURE proc_continue;
+--procedure dropped
+
+--dropping procedure named proc_using_func_insert
+DROP PROCEDURE proc_using_func_insert;
+--procedure dropped
+
+--dropping procedure named proc_using_exception
+DROP PROCEDURE proc_using_exception;
+--procedure dropped
+
+--dropping procedure named proc_delt_location
+DROP PROCEDURE proc_delt_location;
+--procedure dropped
+
+--dropping procedure named pro_using_func_tickets_no
+DROP PROCEDURE pro_using_func_tickets_no;
+--procedure dropped
+
+--dropping the procedure named pro_using_func_display
+DROP PROCEDURE pro_using_func_display;
+--procedure dropped
+
+--dropping procedure named proc_using_func_validation
+DROP PROCEDURE proc_using_func_validation;
+--procedure dropped
+
+--to drop the procedure named proc_using_func_festival
+DROP PROCEDURE proc_using_func_festival;
+--procedure dropped
+
+--to drop the procedure named proc_implicit_cursor
+DROP PROCEDURE proc_implicit_cursor;
+--procedure dropped
+
+--dropping the procedure named proc_exp_cursor
+DROP PROCEDURE proc_exp_cursor;
+--procedure dropped
+
+--dropping procedure named proc_patron_amount
+DROP PROCEDURE proc_patron_amount;
+--procedure dropped
+
+--drop procedure named proc_exp_join
+DROP PROCEDURE proc_exp_join;
+--procedure dropped
+
+--drop procedure named proc_using_func_calc_budget
+DROP PROCEDURE pro_using_func_calc_budget;
+--procedure dropped
+
+--dropping procedure named proc_festival_nature
+DROP PROCEDURE proc_festival_nature;
+--procedure dropped
+
+--DROPPING FUNCTIONS
+
+--dropping function named funct_insert_location
+DROP FUNCTION funct_insert_location;
+--function dropped
+
+--dropping function named funct_delete_locations
+DROP FUNCTION funct_delete_locations;
+--function dropped
+
+--dropping function named funct_exception
+DROP FUNCTION funct_exception;
+--function dropped
+
+--dropping function named func_tickets_no
+DROP FUNCTION func_tickets_no;
+--function dropped
+
+--dropping function named func_display
+DROP FUNCTION func_display;
+--function dropped
+
+--dropping function named func_validation
+DROP FUNCTION func_validation;
+--function dropped
+
+--dropping function named func_festival
+DROP FUNCTION func_festival;
+--function dropped
+
+--dropping function named func_calc_budget
+DROP FUNCTION func_calc_budget;
+--function dropped
+
+--DROPPING TRIGGERS
+
+--dropping trigger named trigg_festiv_date
+DROP TRIGGER trigg_festiv_date;
+--trigger dropped
+
+--dropping trigger named view_budget_changes
+DROP TRIGGER view_budget_changes;
+--trigger dropped
+
+--dropping trigger named trig_using_func_calc_budget
+DROP TRIGGER trig_using_func_calc_budget;
+--trigger dropped
+
+--dropping trigger named trig_calc_festival_date
+DROP TRIGGER trig_calc_festival_date;
+--trigger dropped
+
+--dropping the package named search_name
+DROP PACKAGE search_name;
+--package dropped
+
+
+--dropping tables
+
+DROP TABLE addresses;
+--table dropped
+
+DROP TABLE tickets;
+--table dropped
+
+DROP TABLE festivals;
+--table dropped
+
+DROP TABLE locations;
+--table dropped
+
+DROP TABLE festival_nature;
+--table dropped
+
+DROP TABLE patrons;
+--table dropped
+
+
+--dropping types
+
+DROP TYPE address_type;
+--type dropped
+
+DROP TYPE ticket_varray_type;
+--type dropped
+
+DROP TYPE ticket_type;
+--type dropped
+
+DROP TYPE entertainment_varray_type;
+--type dropped
+
+DROP TYPE entertainment_type;
+--type dropped
+
+DROP TYPE investment_table_type;
+--type dropped
+
+DROP TYPE investment_type;
+--type dropped
+
+PURGE RECYCLEBIN;
+
+
+
+
+
+
+
+
+
+
+
+

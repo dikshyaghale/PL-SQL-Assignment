@@ -1,0 +1,59 @@
+--path to run all script files
+--@D:\Year2\term2\CSY2038_Scripts\run_19.txt
+/*
+Assignment
+Group 19
+
+UON ID:
+18413701-SHIVANI PURWAR
+18406490-DIKSHYA GHALE
+18408450-PRAGYAN KARKI
+18406494-RITESH JHA
+
+
+*/
+--for create
+@D:\Year2\term2\db_group19\create_19.txt
+
+--for constraints
+@D:\Year2\term2\db_group19\constraints_19.txt
+
+--for insert
+@D:\Year2\term2\db_group19\insert_19.txt
+
+--for queries
+@D:\Year2\term2\db_group19\queries_19.txt
+
+--for procedures
+@D:\Year2\term2\db_group19\procedure_19.txt
+
+--for testing procedures
+@D:\Year2\term2\db_group19\procedure_testing_19.txt
+
+--for functions
+@D:\Year2\term2\db_group19\functions_19.txt
+
+--for testing functions
+@D:\Year2\term2\db_group19\function_testing_19.txt
+
+--for cursors
+@D:\Year2\term2\db_group19\cursor_19.txt
+
+--for testing cursor
+@D:\Year2\term2\db_group19\cursor_testing_19.txt
+
+--for trigger
+@D:\Year2\term2\db_group19\trigger_19.txt
+
+--for testing trigger
+@D:\Year2\term2\db_group19\trigger_testing_19.txt
+
+--for package
+@D:\Year2\term2\db_group19\package_19.txt
+
+--for testing package
+@D:\Year2\term2\db_group19\testing_package_19.txt
+
+--for drop
+@D:\Year2\term2\db_group19\drop_19.txt
+

@@ -1,0 +1,473 @@
+--@D:\Year2\term2\CSY2038_Scripts\queries_19.txt
+
+/*
+Assignment
+Group 19
+
+UON ID:
+18413701-SHIVANI PURWAR
+18406490-DIKSHYA GHALE
+18408450-PRAGYAN KARKI
+18406494-RITESH JHA
+
+*/
+
+--clearing column format
+--COLUMN column_name CLEAR
+
+SET LINESIZE 300;
+SET PAGESIZE 300;
+
+--SIMPLE QUERIES
+
+--to view the total tables in the userspace
+SELECT * FROM TAB;
+--7 rows returned
+
+--to view the total constraints stored in user_constraints
+SELECT constraint_name FROM user_constraints
+WHERE constraint_name NOT LIKE 'SYS%';
+--14 rows selected
+
+--to view the primary key stored in database
+SELECT constraint_name FROM user_constraints
+WHERE constraint_name LIKE 'PK%';
+--5 rows returned
+
+--to view the foreign key stored in database
+SELECT constraint_name FROM user_constraints
+WHERE constraint_name LIKE 'FK%';
+--4 rows returned
+
+--to view the total sequences stored in user_sequences
+SELECT sequence_name FROM user_sequences;
+--5 rows returned
+
+--to view the object name and type
+SELECT object_name, object_type FROM user_objects;
+
+--describing tables
+DESC patrons;
+DESC festivals;
+DESC festival_nature;
+DESC tickets;
+DESC locations;
+DESC addresses;
+DESC investment_table;
+
+--viewing the data inserted into the table
+
+SELECT * FROM patrons;
+
+SELECT * FROM festivals;
+
+SELECT * FROM festival_nature;
+
+SELECT * FROM tickets;
+
+SELECT * FROM locations;
+
+SELECT * FROM addresses;
+
+
+--projection with three columns
+
+--formatting the columns
+COLUMN patron_firstname FORMAT A30;
+COLUMN patron_email FORMAT A30;
+COLUMN description FORMAT A30;
+COLUMN patron_id FORMAT A20;
+COLUMN address FORMAT A20;
+COLUMN entertainment FORMAT A30;
+COLUMN nature FORMAT A10;
+COLUMN entertainment FORMAT A20;
+COLUMN festival_date FORMAT A35;
+
+--returns the id, firstname and email of patron
+SELECT patron_id, patron_firstname, patron_email
+FROM patrons;
+--5 rows returned
+
+--return the id, name and date of festival
+SELECT location_id, festival_name, festival_date
+FROM festivals;
+--4 rows returned
+
+--projection from three columns using order by clause
+
+SELECT location_id ID, location_name "NAME", description 
+FROM locations
+ORDER BY location_name DESC;
+--6 rows selected
+
+--checking the firstname of patrons in patrons table
+SELECT patron_firstname FROM patrons;
+--5 rows returned
+
+--using like operator which returns the name of patrons starting from 'S'
+SELECT patron_firstname, patron_email, p_gender
+FROM patrons
+WHERE patron_firstname LIKE 'S%';
+--4 rows returned
+
+--checking the festival name of the table festivals
+SELECT festival_name FROM festivals;
+--3 rows returned
+
+--using not like operator
+SELECT festival_nature_id, festival_name
+FROM festivals 
+WHERE festival_name NOT LIKE 'D%';
+--3 rows returned
+
+--checking the budget
+SELECT budget FROM festival_nature;
+--5 rows selected
+
+--using in operator
+SELECT festival_nature_id ID, budget
+FROM festival_nature
+WHERE budget IN(140000,160000);
+--3 rows returned
+
+--checking the middlename of patrons
+SELECT patron_middlename FROM patrons;
+--4 rows returned
+
+--using operator between and and
+SELECT patron_id, patron_firstname, contact_no
+FROM patrons
+WHERE patron_middlename BETWEEN 'K%' AND 'R%';
+--2 rows returned
+
+--using runtime variable
+SELECT patron_id, patron_firstname, patron_email
+FROM patrons
+WHERE p_gender = '&p_gender';
+--output
+/*
+Enter value for p_gender: M
+old   3: WHERE p_gender = '&p_gender'
+new   3: WHERE p_gender = 'M'
+
+PATRON_ID PATRON_FIRSTNAME               PATRON_EMAIL
+--------- ------------------------------ ------------------------------
+      100 RAMESH                         Rames@.com
+      101 SURESH                         SURESH@.com
+*/
+
+--checking the budget in the table festival_nature
+SELECT budget FROM festival_nature;
+--5 rows returned
+
+--using not equals operator
+SELECT festival_nature_id, budget
+FROM festival_nature
+WHERE budget <> 160000;
+--3 rows returned
+
+
+--OBJECT QUERYING
+--extracting reference from object tables
+SELECT REF(a),street, city, country
+FROM addresses a
+WHERE city = 'SEOUL';
+
+--using poor method to view the address of the festival location
+SELECT venue FROM locations;
+
+--using poor method to view the address of patrons
+SELECT address FROM patrons;
+
+--using BEST METHOD to query patrons table
+SELECT p.address.street street,p.address.city city,p.address.country country
+FROM patrons p;
+--5 rows returned
+
+--using BEST METHOD to query the festival table
+SELECT l.venue.street street, l.venue.city city, l.venue.country country
+FROM locations l
+WHERE l.venue.street NOT LIKE 'BAUDHA';
+
+--using BEST METHOD to query patrons table to see the names and cities of those patrons who lives in basundhara
+SELECT p.patron_firstname, p.address.street street, p.address.city city, p.address.country country
+FROM patrons p
+WHERE p.address.street != 'KALIN';
+--1 row returned
+
+
+--querying using DEREF
+SELECT patron_id, DEREF(address)
+FROM patrons; 
+
+--using poor method to query varray
+SELECT buying_method_used FROM tickets;
+--7 rows selected
+
+--using POOR METHOD to query the varray entertainment
+SELECT entertainment FROM festival_nature;
+
+--using BEST METHOD to retrieve the values from table tickets
+SELECT t.festival_nature_id,t.sold_tickets,b.method_of_payment,b.reciever_name, b.ticket_price
+FROM tickets t,
+TABLE(t.buying_method_used) b;
+--7 rows returned
+
+--using BEST METHOD to retrieve values from the table festival_nature
+SELECT f.nature, e.games, e.music,e.dance
+FROM festival_nature f,
+TABLE(f.entertainment) e
+WHERE festival_nature_id IN(1002,1006);
+
+--using poor method to retrieve data from the nested table
+SELECT investment FROM patrons;
+ 
+--using BEST METHOD to query nested table
+SELECT p.patron_id,p.patron_firstname,p.p_gender, p.patron_surname,i.amount,i.start_date
+FROM patrons p,
+TABLE (p.investment) i
+WHERE patron_id <103;
+--6 rows selected
+
+--QUERYING NESTED TABLE ONLY
+SELECT VALUE(p)
+FROM THE(
+		SELECT investment
+		FROM patrons
+		WHERE patron_id = 102)p;
+
+--SET OPERATOR REMAINING
+--QUERYING UISNG RELATIONAL OPERATOR UNION
+SELECT p.address.city city, p.address.country country
+FROM patrons p
+UNION
+SELECT l.venue.city city, l.venue.country country
+FROM locations l;
+
+
+--QUERYING USING RELATIONAL OPERATOR INTERSECT
+SELECT p.address.city city
+FROM patrons p
+WHERE p.address.city = 'KATHMANDU'
+INTERSECT
+SELECT l.venue.city city
+FROM locations l
+WHERE l.venue.city = 'KATHMANDU';
+
+
+--query using MINUS
+SELECT a.street,a.city,a.country
+FROM addresses a
+MINUS 
+SELECT l.venue.city city, l.venue.street,l.venue.country
+FROM locations l;
+--12 rows selected
+
+--QUERY USING MINUS OPERATION IN NESTED TABLE
+SELECT a.street, a.city, a.country
+FROM addresses a
+MINUS(
+	SELECT p.address.street,p.address.city, p.address.country
+	FROM patrons p 
+	UNION
+	SELECT l.venue.street,l.venue.city, l.venue.country
+	FROM locations l);
+--6 rows returned
+	
+--query to display the number of tickets sold using count function
+SELECT festival_nature_id, COUNT(sold_tickets)
+FROM tickets
+GROUP BY (festival_nature_id)
+ORDER BY COUNT(sold_tickets) DESC;
+--4 rows selected
+
+--query to count the budget fixed for some festival nature 
+SELECT festival_nature_id, COUNT(budget)
+FROM festival_nature
+GROUP BY(festival_nature_id)
+HAVING festival_nature_id>1002
+ORDER BY COUNT(budget) DESC;
+--3 rows returned
+
+--query using AVERAGE FUNCTION that returns the average tickets sold
+SELECT location_id, AVG(sold_tickets)
+FROM tickets
+GROUP BY (location_id)
+HAVING AVG(sold_tickets)>=2;
+--returned 4 rows
+
+--query using function SUM
+SELECT festival_nature_id, SUM(budget)
+FROM festival_nature 
+GROUP BY (festival_nature_id)
+ORDER BY SUM(budget) DESC;
+--6 rows selected
+
+--query using function MIN and MAX
+SELECT t.location_id, MIN(sold_tickets), MAX(sold_tickets)
+FROM tickets t
+GROUP BY (t.location_id);
+--4 rows selected
+
+--query using DISTINCT function
+SELECT DISTINCT(nature)
+FROM festival_nature;
+
+--MORE FUNCTIONS
+--query to update the table festival_nature
+UPDATE festival_nature
+SET budget = budget + (budget * 0.125);
+
+
+--using functions like CEIL, FLOOR, ROUND, AND TRUNC
+SELECT p.patron_firstname,i.amount,
+	CEIL(amount),
+	FLOOR(amount),
+	ROUND(amount),
+	TRUNC(amount)
+FROM patrons p,
+TABLE(p.investment)i
+WHERE patron_id!=103;
+--8 rows selected
+
+--using MAX function along with OTHER FUNCTIONS LIKE CEIL, FLOOR, ROUND, TRUNC
+SELECT p.patron_id,MAX(i.amount),
+	MAX(CEIL(amount)),
+	MAX(FLOOR(amount)),
+	MAX(ROUND(amount)),
+	MAX(TRUNC(amount))
+FROM patrons p,
+TABLE(p.investment)i
+GROUP BY(p.patron_id);
+--5 rows returned
+
+--query using functions CONCAT, SUBSTR
+SELECT CONCAT('HELLO ',
+		CONCAT(
+		SUBSTR(patron_firstname,1,3),
+		SUBSTR(patron_surname,1,3)))
+FROM patrons;
+--5 rows returned
+
+--QUERY USING FUNCTIONS LIKE LOWER,INITCAP, AND TRIM
+SELECT TRIM(TRAILING '' FROM festival_name),
+		CONCAT('ITS ',
+		INITCAP(LOWER(SUBSTR(festival_name,1,3)))) "FESTIVAL"
+FROM festivals;
+--4 rows returned
+
+
+--JOINS
+--joining table patrons and tickets
+SELECT p.patron_firstname,p.address.country,t.festival_id,t.sold_tickets
+FROM patrons p
+JOIN tickets t
+ON p.patron_id = t.patron_id;
+
+--LEFT JOIN
+--querying using left join
+SELECT fn.nature, fn.budget,f.festival_name,f.festival_date
+FROM festival_nature fn
+LEFT JOIN festivals f
+ON fn.festival_nature_id = f.festival_nature_id;
+--5 rows returned
+
+--RIGHT JOIN
+--querying using right join
+SELECT l.location_name,l.venue.country country,l.venue.city city, f.festival_name,f.festival_date
+FROM locations l
+RIGHT JOIN festivals f
+ON l.location_id = f.location_id;
+
+--NESTED FULL JOIN
+SELECT fn.nature, fn.budget, f.festival_name,t.sold_tickets
+FROM festival_nature fn
+FULL JOIN festivals f
+ON fn.festival_nature_id = f.festival_nature_id
+FULL JOIN tickets t
+ON t.festival_nature_id = f.festival_nature_id;
+--11 rows selected
+
+--NESTED LEFT JOIN
+SELECT l.venue.city, l.location_name, f.festival_date,f.festival_name
+FROM locations l
+LEFT JOIN(
+		festivals f JOIN tickets t
+		ON f.location_id = t.location_id
+		JOIN festival_nature fn
+		ON fn.festival_nature_id = f.festival_nature_id
+		)
+ON l.location_id = f.location_id;
+--11 rows selected
+
+
+--NESTED QUERIES
+--querey functions
+--query to list of the patrons who lives in Kathmandu
+SELECT  f.festival_nature_id, f.festival_name
+FROM festivals f
+WHERE f.location_id IN(
+	SELECT l.location_id 
+	FROM locations l
+	WHERE l.venue.city = 'KATHMANDU');
+/*
+FESTIVAL_NATURE_ID FESTIVAL_NAME
+------------------ ---------------
+              1002 HOLI
+              1004 KISHANA_ASTMI
+              1006 DIPAWALI
+
+*/	
+
+--using sub-qureries to find out the patron who live in Nepal
+SELECT p.address.street street, p.address.city city, p.address.country country
+from patrons p
+WHERE p.address.city IN(
+			SELECT l.venue.city
+			FROM locations l
+			WHERE l.venue.country ='NEPAL');
+--outPUT	
+
+/*STREET                    CITY                      COUNTRY
+------------------------- ------------------------- --------------------
+FREAK ST. BASANTAPUR      KATHMANDU                 NEPAL
+		*/
+
+--sub-quering to findout the number of tickets sold for a festival DIPAWALI
+--and method of payment
+SELECT t.sold_tickets , b.method_of_payment
+FROM tickets t, TABLE(t.buying_method_used)b
+WHERE t.location_id IN(
+		SELECT f.location_id
+		FROM festivals f
+		WHERE f.festival_name = 'DIPAWALI'); 
+/*
+--output
+SOLD_TICKETS METHOD_OF_PAYME
+------------ ---------------
+           3 CASH
+*/
+		
+--sub-query using NOT IN which returns the address that are not in patrons
+SELECT a.street, a.city, a.country
+FROM addresses a
+WHERE a.city NOT IN(
+	SELECT p.address.city
+	FROM patrons p);
+
+--output
+/*
+
+STREET                    CITY                      COUNTRY
+------------------------- ------------------------- --------------------
+KALAN                     BIRGUNJ                   UK
+BASIN                     AMSTERDAM                 US
+ME STREET                 CALIFORNIA                US
+23 HOUSE                  BEIZING                   CHINA
+JORPATI                   HULAS                     AUSTRALIA
+
+*/
+
+
+
+

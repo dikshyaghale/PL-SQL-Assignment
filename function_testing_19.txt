@@ -1,0 +1,112 @@
+
+--@D:\Year2\term2\CSY2038_Scripts\function_testing_19.txt
+
+/*
+Assignment
+Group 19
+
+UON ID:
+18413701-SHIVANI PURWAR
+18406490-DIKSHYA GHALE
+18408450-PRAGYAN KARKI
+18406494-RITESH JHA
+
+*/
+--testing of function and procedure 1(funct_insert_location,proc_using_func_insert)
+
+--testing function named funct_insert_location which uses procedure proc_using_func_insert to insert data
+--checking location_name in the table locations
+
+SELECT location_name FROM locations;
+--6 rows selected
+
+--executing the procedure named proc_using_func_insert
+EXEC proc_using_func_insert;
+--HILLE is inserted into the table locations.
+
+--checking if the procedure proc_using_func_insert worked or not
+SELECT location_name FROM locations;
+--7 rows selected
+
+--TESTING OF FUNCTION NAMED funct_delete_locations
+INSERT INTO locations(location_id, location_name , description,venue)
+VALUES(seq_locations.NEXTVAL,'GARDEN PARK', 'THIS HOLI FESTIVALS WITH ALL BEAUTIFUL COLORS AND LOVE AT 10:30 NEAR BANESHOWER IN GARDEN PARK',
+	address_type('BAUDHA' , 'KATHMANDU' , 'NEPAL'));
+--1 row created
+
+--checking the data of the table
+SELECT location_id, location_name FROM locations;
+--8 rows returned
+
+--executing the procedure named proc_delt_location
+EXEC proc_delt_location;
+--1007 is deleted from the table locations.
+
+--checking if the procedure worked or not
+SELECT location_id, location_name FROM locations;
+--7 rows selected
+
+
+--FUNCTION 3
+--testing the function named funct_exception which won't run unless a procedure is created
+EXEC proc_using_exception(&in_location_id);
+--enter 10
+--It displays the message 'ID MUST BE GREATER THAN 1000'
+
+EXEC proc_using_exception(&in_location_id);
+--enter 1002
+--It displays the message 'NAME OF THE LOCATION IS: GAUSHALA'
+
+EXEC proc_using_exception(&in_location_id);
+--enter 2000
+--It displays the message 'THERE IS NO DATA IN IT.'
+
+
+--FUNCTION 4
+--testing for function func_tickets_no
+SELECT sold_tickets FROM tickets;
+--9 rows selected
+
+EXEC pro_using_func_tickets_no;
+--output
+--The number of Tickets sold 75 in event.
+
+--FUNCTION 5
+
+--testing for function func_display
+EXEC pro_using_func_display(&in_age);
+/*
+Enter value for in_price: 12
+the price of 12 year child is 50
+*/
+
+EXEC pro_using_func_display(&in_age);
+/*
+Enter value for in_age: 50
+the price of 50 year old is 100
+*/
+
+--FUNCTION 6
+
+--tseting for function func_validation
+EXEC proc_using_func_validation('shivani');
+--Invalid Email
+
+EXEC proc_using_func_validation('shivani558@gmail.com');
+--VALID EMAIL ID
+
+--FUNCTION 7
+
+--testing for function func_festivals
+SELECT festival_date FROM festivals;
+--4 rows selected
+
+EXEC proc_using_func_festival('20-JUN-19');
+--output
+--Number of festival occurs in 20-JUN-19 is 1
+EXEC proc_using_func_festival('25-APRIL-19');
+--ouput Number of festival occurs in 25-APR-19 is 0
+
+
+
+

@@ -1,0 +1,155 @@
+
+--@D:\Year2\term2\Database2\CSY2038_Scripts\trigger_testing_19.txt
+
+/*
+Assignment
+Group 19
+
+UON ID:
+18413701-SHIVANI PURWAR
+18406490-DIKSHYA GHALE
+18408450-PRAGYAN KARKI
+18406494-RITESH JHA
+
+
+*/
+
+--testing for trigger trigg_festive_date
+INSERT INTO festivals(location_id,festival_nature_id,festival_name , festival_date)
+VALUES(1002,1002, 'FOOD_FESTIVAL' ,'30-MARCH-2019'); 
+--output
+--HOLI has been occured  20 days before from today
+--1 row created.
+
+
+
+--testing for trigger view_budget_changes
+DECLARE   
+    all_rows number(2);  
+  BEGIN  
+      UPDATE  festival_nature  
+      SET budget = budget + 500;  
+      IF sql%notfound THEN  
+          DBMS_OUTPUT.PUT_LINE('no budget updated');  
+      ELSIF sql%found THEN  
+         all_rows := sql%rowcount;  
+         DBMS_OUTPUT.PUT_LINE( all_rows || ' festival_nature updated ');  
+      END IF;   
+END;  
+/  
+--output
+--Old Budget: 120000
+--New Budget: 120500
+--Bugdet difference: 500
+--Old Budget: 130000
+--New Budget: 130500
+--Bugdet difference: 500
+--Old Budget: 140000
+--New Budget: 140500
+--Bugdet difference: 500
+--Old Budget: 160000
+--New Budget: 160500
+--Bugdet difference: 500
+--Old Budget: 160000
+--New Budget: 160500
+--Bugdet difference: 500
+--Old Budget: 158900
+--New Budget: 159400
+--Bugdet difference: 500
+--6 festival_nature updated
+
+--PL/SQL procedure successfully completed.
+
+
+DECLARE   
+       all_rows number(2);  
+    BEGIN  
+       UPDATE  festival_nature  
+       SET budget = budget + 500;  
+       IF sql%notfound THEN  
+          dbms_output.put_line('no budget updated');  
+       ELSIF sql%found THEN  
+          all_rows := sql%rowcount;  
+          dbms_output.put_line( all_rows || ' festival_nature updated ');  
+       END IF;   
+    END;  
+    /  
+
+
+--as many time the above code is executed the budget will increase by 500 
+--Old Budget: 120500
+--New Budget: 121000
+--Bugdet difference: 500
+--Old Budget: 130500
+--New Budget: 131000
+--Bugdet difference: 500
+--Old Budget: 140500
+--New Budget: 141000
+--Bugdet difference: 500
+--Old Budget: 160500
+--New Budget: 161000
+--Bugdet difference: 500
+--Old Budget: 160500
+--New Budget: 161000
+--Bugdet difference: 500
+--Old Budget: 159400
+--New Budget: 159900
+--Bugdet difference: 500
+--6 festival_nature updated
+
+--PL/SQL procedure successfully completed.
+
+
+
+
+--testing procedure using func_calc_budget
+EXEC pro_using_func_calc_budget(100,500);
+
+INSERT INTO festival_nature(festival_nature_id,budget,nature,entertainment)
+VALUES (seq_festival_nature.NEXTVAL, 140000,'ART FESTIVAL',
+	entertainment_varray_type(
+		entertainment_type('RANGOLI COMPETITION' , 'ARATI SONGS' , 'TRADITIONAL', 'PRICE')));
+--output
+--THE NEW BUDGET IS INSERTED
+--1 row created.
+
+update festival_nature set budget=600
+where festival_nature_id=1058;
+--THE NEW BUDGET COST IS GREATER THAN PERIVIOUS EVENT
+
+
+update festival_nature set budget=400
+where festival_nature_id=1058;
+--THE NEW BUDGET COST IS LESS THAN PREVIOUS EVENT
+
+--trigger 4 testing
+--checking the data in the table festivals
+SELECT festival__nature_id, festival_name FROM festivals;
+--6 rows selected
+
+--inserting into the table named festivals with date exceeding 2 years from now
+
+INSERT INTO festivals(location_id,festival_nature_id,festival_name , festival_date)
+VALUES(1001,1004, 'DIPAWALI' ,'30-MARCH-2029'); 
+--error message saying "YOU CANT REGISTER THE TRANSACTIONS THAT OCCURS TWO YEARS FROM NOW." was generated.
+
+--checking if the data really got inserted or not
+SELECT festival_nature_id,festival_name FROM festivals;
+--6 rows selected
+--no data has been inserted
+
+--inserting into the table with correct date value
+INSERT INTO festivals(location_id,festival_nature_id,festival_name , festival_date)
+VALUES(1005,1008, 'FOOD_FESTIVAL' ,'26-OCT-2018');
+--output
+/*
+VALUE INSERTED
+FOOD_FESTIVAL has been occured  175 days before from today
+*/
+
+--checking if the value changed in database or not
+SELECT festival_nature_id,festival_name FROM festivals;
+--7 rows inserted
+
+
+

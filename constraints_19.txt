@@ -1,0 +1,149 @@
+
+--@D:\Year2\term2\CSY2038_Scripts\constraints_19.txt
+/*
+Assignment
+Group 19
+
+UON ID:
+18413701-SHIVANI PURWAR
+18406490-DIKSHYA GHALE
+18408450-PRAGYAN KARKI
+18406494-RITESH JHA
+
+*/
+
+--PKs
+
+--creating primary key for table patrons
+ALTER TABLE patrons
+ADD CONSTRAINT pk_patrons
+PRIMARY KEY (patron_id);
+--table altered
+
+
+--creating primary key for table festival_nature
+ALTER TABLE festival_nature
+ADD CONSTRAINT pk_festival_nature
+PRIMARY KEY (festival_nature_id);
+--table altered
+
+
+--creating primary key for table locations
+ALTER TABLE locations
+ADD constraints pk_locations
+PRIMARY KEY (location_id);
+--table altered
+
+
+--creating primary key for table festivals
+ALTER TABLE festivals 
+ADD CONSTRAINT pk_festivals
+PRIMARY KEY (festival_nature_id,location_id);
+--table altered
+
+
+--creating primary key for table tickets
+ALTER TABLE tickets
+ADD CONSTRAINT pk_tickets
+PRIMARY KEY (patron_id,festival_nature_id,location_id);
+--table altered
+
+
+--FKs
+
+--creating foreign key for table festivals
+ALTER TABLE festivals
+ADD CONSTRAINT fk_f_locations
+FOREIGN KEY (location_id)
+REFERENCES locations(location_id);
+--table altered
+
+
+--creating foreign key for table festivals
+ALTER TABLE festivals 
+ADD CONSTRAINT fk_f_festival_nature
+FOREIGN KEY (festival_nature_id)
+REFERENCES festival_nature(festival_nature_id);
+--table altered message was displayed
+
+
+--creating compound foreign key for table tickets named fk_t_festivals
+ALTER TABLE tickets
+ADD CONSTRAINT fk_t_festivals
+FOREIGN KEY (festival_nature_id,location_id)
+REFERENCES festivals(festival_nature_id,location_id);
+--table was altered
+
+
+--creating foreign key for table tickets named fk_t_patrons
+ALTER TABLE tickets
+ADD CONSTRAINT fk_t_patrons
+FOREIGN KEY (patron_id)
+REFERENCES patrons(patron_id);
+--table altered
+
+
+--adding unique constraints
+
+--making contact number of patron unique
+ALTER TABLE patrons
+ADD CONSTRAINT uk_p_contact
+UNIQUE (contact_no);
+--table altered
+
+
+--make email of patrons unique
+ALTER TABLE patrons
+ADD CONSTRAINT uk_p_email
+UNIQUE (patron_email);
+--table altered
+
+
+--adding check constraints
+
+--checking if the firstname of patron is in upper or not
+ALTER TABLE patrons
+ADD CONSTRAINT ck_p_firstname
+CHECK(patron_firstname = UPPER(patron_firstname));
+--table altered
+
+
+--checking if the festival name is in upper or not
+ALTER TABLE festivals
+ADD CONSTRAINT ck_f_festival
+CHECK(festival_name = UPPER(festival_name));
+--table altered
+
+
+--check if the patron is male or female
+ALTER TABLE patrons
+ADD CONSTRAINT ck_p_gender
+CHECK(p_gender IN('F','M'));
+--table altered
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+

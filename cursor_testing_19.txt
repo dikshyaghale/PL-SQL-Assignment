@@ -1,0 +1,126 @@
+--@D:\Year2\term2\CSY2038_Scripts\cursor_testing_19.txt
+
+/*
+Assignment
+Group 19
+
+UON ID:
+18413701-SHIVANI PURWAR
+18406490-DIKSHYA GHALE
+18408450-PRAGYAN KARKI
+18406494-RITESH JHA
+
+
+*/
+SET SEVEROUTPUT ON;
+
+--testing cursor 1
+--checking the data from the table festivals
+SELECT festival_name, festival_date
+FROM festivals;
+--7 rows returned
+
+--inserting into table festivals
+INSERT INTO festivals(location_id,festival_nature_id,festival_name,festival_date)
+VALUES(1001,1004,'BUDDHA JAYANTI','20-JUN-19');
+--1 row created
+
+--checking the data from the table festivals after inserting new data
+SELECT festival_name, festival_date
+FROM festivals;
+--8 rows returned
+
+--executing the procedure named proc_implicit_cursor passing wrong input
+EXEC proc_implicit_cursor('HELLO');
+--message saying 'NO SUCH FESTIVAL' is displayed
+
+--checking the data from the table festivals after executing the procedure named proc_implicit_cursor with wrong input
+SELECT festival_name, festival_date
+FROM festivals;
+--8 rows returned
+--no change in database
+
+--executing the procedure named proc_implicit_cursor correct input
+EXEC proc_implicit_cursor('BUDDHA JAYANTI');
+--message displaying 'DELETED BUDDHA JAYANTI'
+ 
+ --checking the data from the table festivals after executing the procedure named proc_implicit_cursor with correct input
+SELECT festival_name, festival_date
+FROM festivals;
+--7 rows returned
+
+--TESTING CURSOR 2
+
+--executing the procedure named proc_exp_cursor
+EXEC proc_exp_cursor;
+/*
+OUTPUT
+
+1007 BESISHAHAR
+1000 GARDEN PARK
+1001 CHOVAR DADA
+1002 GAUSALA
+1003 FREAK ST. BASANTAPUR
+1004 TRIPURESHOWER
+1005 TRIPURESHOWER
+1006
+*/
+
+--TESTING CURSOR 3
+
+
+--executing the cursor proc_patron_amount
+EXEC proc_patron_amount(&in_amount);
+--enter 14000
+/*
+Enter value for in_amount: 14000
+SN firstname amount
+------------------------------------
+1  SHIVANI  19550.98
+2  RAMESH  14500.6
+3  RAMESH  20000.7
+THERE ARE 3 ROWS
+*/
+
+--testing cursor 4
+EXEC proc_exp_join;
+--output
+/*
+SN COUNTRY CITY FESTIVAL_NAME FESTIVAL_DATE
+------------------------------------
+1  NEPAL  KATHMANDU HOLI 20-JUN-19
+2  NEPAL  KATHMANDU KISHANA_ASTMI 20-APR-19
+3  NEPAL  KATHMANDU DIPAWALI 30-MAR-19
+4  KOREA  BESISHAHAR CONCERT 26-OCT-19
+5  NEPAL  KATHMANDU FOOD_FESTIVAL 20-JUN-19
+6  NEPAL  KATHMANDU FOOD_FESTIVAL 30-MAR-19
+7     FOOD_FESTIVAL 26-OCT-18
+*/
+
+--testing cursor 5
+SELECT budget FROM festival_nature;
+--5 rows selected
+
+EXEC proc_festival_nature(10000);
+--output
+/*
+FILMY FESTIVALS 270000
+FILMY FESTIVALS 135000
+CONCERT FESTIVAL 146250
+ART FESTIVAL 157500
+RELIGIUOS FESTIVALS 180000
+SEASONAL FESTIVAL 180000
+ART FESTIVAL 140000
+*/
+EXEC proc_festival_nature(140000);
+--output
+/*
+FILMY FESTIVALS 270000
+CONCERT FESTIVAL 146250
+ART FESTIVAL 157500
+RELIGIUOS FESTIVALS 180000
+SEASONAL FESTIVAL 180000
+ART FESTIVAL 140000
+*/
+EXEC proc_festival_nature(1400000);
+--NO SUCH BUDGET

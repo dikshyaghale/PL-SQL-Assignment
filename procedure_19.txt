@@ -1,0 +1,132 @@
+--@D:\Year2\term2\CSY2038_Scripts\procedure_19.txt
+
+/*
+Assignment
+Group 19
+
+UON ID:
+18413701-SHIVANI PURWAR
+18406490-DIKSHYA GHALE
+18408450-PRAGYAN KARKI
+18406494-RITESH JHA
+
+*/
+
+
+SET SERVEROUTPUT ON
+
+--procedure 1
+--creating procedure to insert in festival_nature
+CREATE OR REPLACE PROCEDURE proc_insert_festival_nature AS
+vc_festival_nature festival_nature.nature%TYPE :='VISION FESTIVAL';
+
+BEGIN
+	INSERT INTO festival_nature(festival_nature_id,budget,nature,entertainment)
+	VALUES(seq_festival_nature.NEXTVAL,158900,vc_festival_nature,
+		entertainment_varray_type(
+			entertainment_type('DEBATE','NATIONAL SONGS' ,'TRADINATIONAL DANCES' ,'OTHER EXTRA')));
+
+END proc_insert_festival_nature;
+/
+SHOW ERROR;
+--no errors
+
+
+--procedure 2
+--creating Parametrized procedure for deleting the data of table festival_nature
+CREATE OR REPLACE PROCEDURE proc_delt_festival_nature AS
+vc_festival_nature VARCHAR2(30);
+
+BEGIN
+
+	SELECT seq_festival_nature.CURRVAL
+	INTO vc_festival_nature
+	FROM dual;
+	
+	DELETE FROM festival_nature
+	WHERE festival_nature_id = vc_festival_nature;
+	
+	DBMS_OUTPUT.PUT_LINE(vc_festival_nature||' is deleted.');
+	
+END proc_delt_festival_nature;
+/
+SHOW ERRORS;
+--no errors
+
+--procedure 3
+--creating procedure named proc__runtime which asks for the value before retrieving the value 
+CREATE OR REPLACE PROCEDURE proc_name_runtime(in_id patrons.patron_id%TYPE) IS
+vc_name patrons.patron_firstname%TYPE;
+
+BEGIN
+	SELECT patron_firstname
+	INTO vc_name
+	FROM patrons
+	WHERE patron_id = in_id;
+	
+	DBMS_OUTPUT.PUT_LINE('The name of the patron holding id ' ||in_id ||' is: ' ||vc_name);
+	
+END proc_name_runtime;
+/
+SHOW ERRORS;
+
+
+--procedure 4
+--creating the procedure named proc_lower that returns the value in lower case
+CREATE OR REPLACE PROCEDURE proc_lower AS
+vc_location_lower VARCHAR2(30);
+
+BEGIN
+	SELECT LOWER(l.location_name)
+	INTO vc_location_lower
+	FROM locations l
+	WHERE location_id = 1001;
+	
+	DBMS_OUTPUT.PUT_LINE('The name of the location in lowercase is: '||vc_location_lower);
+END proc_lower;
+/
+SHOW ERRORS;
+
+--procedure 5
+--create procedure for update statement which is named proc_update
+
+CREATE OR REPLACE PROCEDURE proc_update(in_festival_budget IN festival_nature.festival_nature_id%TYPE, in_number IN NUMBER)
+IS
+BEGIN 
+	UPDATE festival_nature
+	SET budget = budget + budget * in_number/100
+	WHERE festival_nature_id = in_festival_budget;
+END proc_update;
+/
+SHOW ERRORS;
+
+--procedure 6
+--procedure using continue statement
+CREATE OR REPLACE PROCEDURE proc_continue AS
+vn_location_id locations.location_id%TYPE :=1000;
+
+BEGIN
+	WHILE vn_location_id<seq_locations.CURRVAL
+	LOOP 
+		vn_location_id := vn_location_id + 1;
+		IF vn_location_id = 1002 THEN
+			CONTINUE;
+		END IF;
+		DBMS_OUTPUT.PUT_LINE(vn_location_id);
+	END LOOP;
+END proc_continue;
+/
+--procedure created
+SHOW ERRORS;
+--no errors
+
+
+
+
+
+
+
+
+
+
+

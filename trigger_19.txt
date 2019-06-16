@@ -1,0 +1,133 @@
+
+--@D:\Year2\term2\Database2\CSY2038_Scripts\trigger_19.txt
+
+/*
+Assignment
+Group 19
+
+UON ID:
+18413701-SHIVANI PURWAR
+18406490-DIKSHYA GHALE
+18408450-PRAGYAN KARKI
+18406494-RITESH JHA
+
+
+*/
+SET SEVEROUTPUT ON;
+
+--creating trigger to get info when the festivals is occurs from today.
+CREATE OR REPLACE TRIGGER trigg_festiv_date
+AFTER INSERT OR UPDATE ON festivals
+FOR EACH ROW
+BEGIN
+	DBMS_OUTPUT.PUT_LINE((:NEW.festival_name)|| ' has been occured  '|| TRUNC((SYSDATE-:NEW.festival_date))|| ' days before from today');
+END;
+/
+show errors;
+--output
+--Trigger created.
+
+
+----lets take a program to create a row level trigger
+--for the festival_nature table to display budeget difference old and new budget.
+CREATE OR REPLACE TRIGGER view_budget_changes
+BEFORE DELETE OR INSERT OR UPDATE ON festival_nature
+FOR EACH ROW
+WHEN(NEW.festival_nature_id>0)
+DECLARE
+ bud_differnce NUMBER;
+ 
+BEGIN
+	bud_differnce:= :NEW.budget - :OLD.budget;
+	dbms_output.put_line('Old Budget: ' || :OLD.budget);  
+   dbms_output.put_line('New Budget: ' || :NEW.budget);  
+   dbms_output.put_line('Bugdet difference: ' || bud_differnce);  
+END;  
+/  
+--output
+--Trigger created.
+
+--TRIGGER 4
+--checking the minimun and maxing budget from festival_nature
+CREATE OR REPLACE FUNCTION func_calc_budget(in_new_budget festival_nature.budget%TYPE, in_old_budget festival_nature.budget%TYPE)RETURN
+NUMBER IS
+vn_diffe NUMBER(8);
+BEGIN
+	vn_diffe:=in_old_budget-in_new_budget;
+	
+	return vn_diffe;
+END func_calc_budget;
+/
+ SHOW ERRORS;
+-- Function created.
+
+--creating procedure named pro_using_func_calc_budget
+CREATE OR REPLACE PROCEDURE pro_using_func_calc_budget(in_new_budget festival_nature.budget%TYPE, in_old_budget festival_nature.budget%TYPE)IS
+vn_number NUMBER(8);
+BEGIN
+	vn_number:=func_calc_budget(in_new_budget,in_old_budget);
+	
+END;
+/
+
+
+--creating trigger named trig_using_func_calc_budget which calculates the budget
+CREATE OR REPLACE TRIGGER trig_using_func_calc_budget 
+AFTER INSERT OR UPDATE OF budget ON festival_nature
+FOR EACH ROW
+
+DECLARE
+	vn_max_budget_diff NUMBER(7);
+	vn_budget_diff NUMBER(7);
+	vn_max_budget NUMBER(7);
+BEGIN
+	IF INSERTING THEN
+		DBMS_OUTPUT.PUT_LINE('THE NEW BUDGET IS INSERTED');
+	ELSIF UPDATING THEN
+	
+		vn_max_budget_diff:=func_calc_budget(:NEW.budget, :OLD.budget);
+			IF vn_max_budget_diff<0 THEN
+			DBMS_OUTPUT.PUT_LINE('THE NEW BUDGET COST IS LESS THAN PREVIOUS EVENT');
+			ELSE
+			DBMS_OUTPUT.PUT_LINE('THE NEW BUDGET COST IS GREATER THAN PERVIOUS EVENT');
+			END IF;
+		ELSE
+			DBMS_OUTPUT.PUT_LINE('YOU HAVE DELETD ID'||:OLD.festival_nature_id);
+	END IF;
+END trig_using_func_calc_budget;
+/
+--Trigger created
+
+--trigger 4
+--creating trigger named trig_calc_festival_date that restricts to insert the date which is of two years from now
+CREATE OR REPLACE TRIGGER trig_calc_festival_date
+AFTER INSERT OR UPDATE ON festivals
+FOR EACH ROW
+WHEN(NEW.festival_date IS NOT NULL)
+
+DECLARE
+vd_day DATE;
+
+BEGIN
+	SELECT SYSDATE
+	INTO vd_day
+	FROM dual;
+	
+	IF(:NEW.festival_date>(vd_day+(365*2)))THEN
+		RAISE_APPLICATION_ERROR(-20000,'YOU CANT REGISTER THE TRANSACTIONS THAT OCCURS TWO YEARS FROM NOW.');
+	ELSE
+		DBMS_OUTPUT.PUT_LINE('VALUE INSERTED');
+	END IF;
+END trig_calc_festival_date;
+/
+
+
+
+	
+	
+
+
+
+
+
+

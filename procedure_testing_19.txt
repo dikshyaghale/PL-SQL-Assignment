@@ -1,0 +1,94 @@
+
+--@D:\Year2\term2\CSY2038_Scripts\procedure_testing_19.txt
+
+/*
+Assignment
+Group 19
+
+UON ID:
+18413701-SHIVANI PURWAR
+18406490-DIKSHYA GHALE
+18408450-PRAGYAN KARKI
+18406494-RITESH JHA
+
+*/
+
+--Testing proc_insert_festival_nature
+
+--checking the current state of database
+SELECT festival_nature_id, nature FROM festival_nature;
+--6 rows selected
+
+--executing the procedure named proc_insert_festival_nature
+EXEC proc_insert_festival_nature;
+--procedure successfully completed
+
+--testing if the data has been inserted in the table or not
+SELECT festival_nature_id, nature from festival_nature;
+--7 rows selected
+
+--checking the data of the table festival_nature
+SELECT festival_nature_id,nature 
+FROM festival_nature;
+--7 rows selected
+
+--TESTING OF PROC_DELT_FESTIVAL_NATURE
+--executing the procedure named proc_delt_festival_nature
+EXEC proc_delt_festival_nature;
+
+--checking if the procedure worked or not
+SELECT festival_nature_id,nature 
+FROM festival_nature;
+--6 rows selected
+
+
+--testing the procedure named proc_name_runtime
+EXEC proc_name_runtime(&in_id);
+/*
+Output
+Enter value for in_id: 101
+The name of the patron holding id 101 is: SURESH
+
+PL/SQL procedure successfully completed.
+*/
+
+--executing the procedure named proc_lower
+EXEC proc_lower;
+/*
+	The name of the location in lowercase is: chovar dada
+*/
+
+--TESTING OF PROC_UPDATE
+SELECT budget FROM festival_nature;
+/*
+ BUDGET
+----------
+    120000
+    130000
+    140000
+    160000
+    160000
+*/
+--executing the procedure proc_update
+EXEC proc_update(1000,100);
+
+--checking if the budget got updated or not
+SELECT budget FROM festival_nature;
+/*
+ BUDGET
+----------
+    240000
+    130000
+    140000
+    160000
+    160000
+*/
+
+--executing the procedure named exec_continue
+EXEC proc_continue;
+
+
+
+
+
+

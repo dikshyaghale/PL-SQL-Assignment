@@ -1,0 +1,187 @@
+
+--@D:\Year2\term2\CSY2038_Scripts\create_19.txt
+
+/*
+Assignment
+Group 19
+
+UON ID:
+18413701-SHIVANI PURWAR
+18406490-DIKSHYA GHALE
+18408450-PRAGYAN KARKI
+18406494-RITESH JHA
+
+*/
+
+
+
+--creating the object_type named address_type
+CREATE OR REPLACE TYPE address_type AS OBJECT (
+street VARCHAR2(25),
+city VARCHAR2(25),
+country VARCHAR2(20))
+/
+--type created
+SHOW ERRORS;
+--no errors
+
+
+--creating type named investment_type
+CREATE OR REPLACE TYPE investment_type AS OBJECT(
+start_date DATE,
+end_date DATE,
+amount NUMBER(10,2));
+/
+--type created
+SHOW ERRORS;
+--no errors
+
+COLUMN amount FORMAT $99,99;
+
+
+--creating the nested table named investment_table_type
+CREATE TYPE investment_table_type AS TABLE OF investment_type;
+/
+--type created
+SHOW ERRORS;
+--no errors
+
+--creating the object table named addresses
+CREATE TABLE addresses OF address_type;
+--table created
+SHOW ERRORS;
+--no errors
+
+
+
+--create table named patrons
+CREATE TABLE patrons(
+patron_id NUMBER(5),
+patron_firstname VARCHAR2(15) NOT NULL,
+patron_middlename VARCHAR2(15),
+patron_surname VARCHAR2(15) NOT NULL,
+address REF address_type SCOPE IS addresses,
+patron_email VARCHAR2(30),
+contact_no VARCHAR2(15),
+p_gender CHAR,
+contract_date DATE,
+investment investment_table_type)
+NESTED TABLE  investment STORE AS investment_table;
+--table created
+
+
+--creating object_type named entertainment_type
+CREATE OR REPLACE TYPE entertainment_type AS OBJECT(
+games VARCHAR2(30),
+music VARCHAR2(25),
+dance VARCHAR2(30),
+extra VARCHAR2(20));
+/
+--type created
+SHOW ERRORS;
+--no errors
+
+
+--creating varray_type named entertainment_varray_type
+CREATE TYPE entertainment_varray_type AS VARRAY(40) OF entertainment_type;
+/
+--type created
+SHOW ERRORS;
+--no errors
+
+
+--create table named festival_nature
+CREATE TABLE festival_nature(
+festival_nature_id NUMBER(5),
+budget NUMBER(30),
+nature VARCHAR2(40),
+entertainment entertainment_varray_type);
+--table created
+
+
+--CREATE TABLE NAMED LOCATION
+CREATE TABLE locations(
+location_id NUMBER(5),
+location_name VARCHAR2(20),
+description VARCHAR2(200),
+venue address_type);
+--table created
+
+
+--creating table named festival_nature
+CREATE TABLE festivals(
+location_id NUMBER(5),
+festival_nature_id NUMBER(5),
+festival_name VARCHAR2(15) NOT NULL,
+festival_date DATE);
+--table created
+
+
+--creating the object_type named ticket_type
+CREATE OR REPLACE TYPE ticket_type AS OBJECT(
+method_of_payment VARCHAR2(15),
+reciever_name VARCHAR2(20),
+receiver_age NUMBER(2),
+ticket_price NUMBER(20));
+/
+--type created
+SHOW ERRORS;
+--no errors
+
+
+--creating the varray named ticket_varray_type
+CREATE TYPE ticket_varray_type AS VARRAY(50) OF ticket_type;
+/
+--type created
+SHOW ERRORS;
+--no errors
+
+
+--creating table named tickets
+CREATE TABLE tickets(
+patron_id NUMBER(5),
+festival_nature_id NUMBER(5),
+location_id NUMBER(5),
+sold_tickets NUMBER(5),
+buying_method_used ticket_varray_type);
+--table created
+
+
+--creating sequence named seq_patrons
+CREATE SEQUENCE seq_patrons
+INCREMENT BY 1
+START WITH 100
+NOCYCLE;
+--sequence created
+
+
+--creating sequence for locations
+CREATE SEQUENCE seq_locations
+INCREMENT BY 1
+START WITH 1000
+MAXVALUE 10000
+NOCYCLE;
+--sequence created
+
+
+--creating sequence for festival_nature
+CREATE SEQUENCE seq_festival_nature
+INCREMENT BY 2
+START WITH 1000
+MINVALUE 100
+NOCYCLE;
+--sequence created
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+

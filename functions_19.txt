@@ -1,0 +1,256 @@
+
+--@D:\Year2\term2\CSY2038_Scripts\functions_19.txt
+
+/*
+Assignment
+Group 19
+
+UON ID:
+18413701-SHIVANI PURWAR
+18406490-DIKSHYA GHALE
+18408450-PRAGYAN KARKI
+18406494-RITESH JHA
+
+*/
+
+--function 1
+--creating function named funct_insert_location to insert data into the table locations
+CREATE OR REPLACE FUNCTION funct_insert_location RETURN VARCHAR2 IS
+
+vc_location_name locations.location_name%TYPE := 'HILLE';
+
+BEGIN
+	INSERT INTO locations(location_id,location_name,description,venue)
+	VALUES(seq_locations.NEXTVAL,vc_location_name,'A MUST GO PLACE FOR CONCERT',
+		address_type('GUMBA CHOWK','HILLE','NEPAL'
+			));
+	
+	RETURN vc_location_name;
+END funct_insert_location;
+/
+--function created
+SHOW ERRORS;
+
+--creating procedure named proc_using_func_insert which uses function funct_insert_location
+CREATE OR REPLACE PROCEDURE proc_using_func_insert IS
+vc_location_name VARCHAR2(30);
+
+BEGIN
+	vc_location_name := funct_insert_location;
+	DBMS_OUTPUT.PUT_LINE(vc_location_name || ' is inserted into the table locations.');
+	
+END proc_using_func_insert;
+/
+--procedure created
+SHOW ERRORS;
+
+
+--function 2
+--creating function named funct_delete_locations
+CREATE OR REPLACE FUNCTION funct_delete_locations RETURN NUMBER IS
+vn_location NUMBER(20);
+
+BEGIN 
+	SELECT seq_locations.CURRVAL
+	INTO vn_location
+	FROM dual;
+	
+	DELETE FROM locations
+	WHERE location_id = vn_location;
+	
+	RETURN vn_location;
+
+END funct_delete_locations;
+/
+SHOW ERRORS;
+
+
+--creating procedure named proc_delt_location using function funct_delete_locations
+CREATE OR REPLACE PROCEDURE proc_delt_location IS
+vc_location VARCHAR2(20);
+
+BEGIN
+	vc_location := funct_delete_locations;
+	DBMS_OUTPUT.PUT_LINE(vc_location ||' is deleted from the table locations.');
+END proc_delt_location;
+/
+SHOW ERRORS;
+
+
+--function 3
+--creating function named funct_exception which displays the name of locations as per their id but throws exception when wrong id is entered
+
+CREATE OR REPLACE FUNCTION funct_exception(in_location_id IN locations.location_id%TYPE) RETURN VARCHAR2 IS
+	vc_location_name locations.location_name%TYPE;
+
+	ex_invalid_id EXCEPTION;
+
+BEGIN
+	IF in_location_id <1000 THEN
+		RAISE ex_invalid_id;
+	ELSE
+		SELECT location_name
+		INTO vc_location_name
+		FROM locations
+		WHERE location_id = in_location_id;
+		
+		DBMS_OUTPUT.PUT_LINE('NAME OF THE LOCATION IS: '|| vc_location_name);
+	END IF;
+	RETURN vc_location_name;
+	
+	EXCEPTION
+		WHEN ex_invalid_id THEN
+			DBMS_OUTPUT.PUT_LINE('ID MUST BE GREATER THAN 1000');
+			RETURN vc_location_name;
+			
+		WHEN NO_DATA_FOUND THEN
+			DBMS_OUTPUT.PUT_LINE('THERE IS NO DATA IN IT');
+			RETURN vc_location_name;
+		
+END funct_exception;
+/
+--function created
+SHOW ERRORS;
+
+--creating procedure proc_using_exception that uses the function funct_exception 
+CREATE OR REPLACE PROCEDURE proc_using_exception(in_location_id IN locations.location_id%TYPE) IS
+vc_output VARCHAR2(25);
+
+BEGIN
+	vc_output := funct_exception(in_location_id);
+	
+END proc_using_exception;
+/
+--procedure created
+SHOW ERRORS
+
+
+--function 4
+--creating function func_tickets_no to counts the tickets
+CREATE OR REPLACE FUNCTION func_tickets_no RETURN NUMBER IS 
+vn_tickets_count NUMBER(3);
+BEGIN
+	SELECT SUM(sold_tickets)
+	INTO vn_tickets_count
+	FROM tickets;
+	RETURN vn_tickets_count;
+END func_tickets_no;
+/
+SHOW ERRORS;
+
+--creating procedure
+CREATE OR REPLACE PROCEDURE pro_using_func_tickets_no IS
+	vn_no_of_tickets NUMBER(3);
+BEGIN
+	vn_no_of_tickets:= func_tickets_no;
+		DBMS_OUTPUT.PUT_LINE('The number of Tickets sold ' || vn_no_of_tickets|| ' all event. ');
+END pro_using_func_tickets_no;
+/
+SHOW ERRORS;
+
+
+--function 5
+--creating function to display price according to years.
+CREATE OR REPLACE FUNCTION func_display(in_age NUMBER) RETURN NUMBER IS
+vn_price NUMBER(5):=in_age;
+BEGIN
+
+ CASE vn_price
+	WHEN 1 THEN DBMS_OUTPUT.PUT_LINE('the price of 1 year child is 50');
+	WHEN 2THEN DBMS_OUTPUT.PUT_LINE('the price of  2 year child is 50');
+	WHEN 3 THEN DBMS_OUTPUT.PUT_LINE('the price of 3 year child is 50');
+	WHEN 4 THEN DBMS_OUTPUT.PUT_LINE('the price of 4 year child is 50');
+	WHEN 5 THEN DBMS_OUTPUT.PUT_LINE('the price of 5 year child is 50');
+	WHEN 6 THEN DBMS_OUTPUT.PUT_LINE('the price of 6 year child is 50');
+	WHEN 7 THEN DBMS_OUTPUT.PUT_LINE('the price of 7 year child is 50');
+	WHEN 8 THEN DBMS_OUTPUT.PUT_LINE('the price of 8 year child is 50');
+	WHEN 9 THEN DBMS_OUTPUT.PUT_LINE('the price of 9 year child is 50');
+	WHEN 10 THEN DBMS_OUTPUT.PUT_LINE('the price of 10 year child is 50');
+	WHEN 11 THEN DBMS_OUTPUT.PUT_LINE('the price of 11 year child is 50');
+	WHEN 12 THEN DBMS_OUTPUT.PUT_LINE('the price of 12 year child is 50');
+	WHEN 13 THEN DBMS_OUTPUT.PUT_LINE('the price of 13 year child is 50');
+	WHEN 14 THEN DBMS_OUTPUT.PUT_LINE('the price of 14 year child is 50');
+	WHEN 15 THEN DBMS_OUTPUT.PUT_LINE('the price of 15 year child is 50');
+	ELSE DBMS_OUTPUT.PUT_LINE('the price of '||vn_price||' year old is 100');
+	END CASE;
+	RETURN vn_price;
+END func_display;
+/
+SHOW ERRORS;
+
+--creating procedure to search name of patron by using function func_search
+CREATE OR REPLACE PROCEDURE pro_using_func_display(in_age NUMBER) AS
+vn_cost NUMBER(5);
+BEGIN
+vn_cost:=func_display(in_age);
+END pro_using_func_display;
+/
+SHOW ERRORS;
+--no errors
+
+
+--function 6
+--creating function to validate email id 
+CREATE OR REPLACE FUNCTION func_validation(in_email_id VARCHAR2) RETURN NUMBER IS
+vn_email_validate NUMBER(2);
+BEGIN 
+ IF in_email_id LIKE '%_@_%_.__%'
+ THEN 
+	vn_email_validate:=0;
+ELSE
+	vn_email_validate:=1;
+END IF;
+	RETURN vn_email_validate;
+END func_validation;
+/
+SHOW ERRORS;
+ 
+ --creating procedure for exceute func_validation
+CREATE OR REPLACE PROCEDURE proc_using_func_validation(in_email_id VARCHAR2) IS
+	vn_check NUMBER(2);
+	
+BEGIN
+	vn_check:=func_validation(in_email_id);
+	IF vn_check = 0
+	THEN
+		DBMS_OUTPUT.PUT_LINE('VALID EMAIL ID ');
+	ELSE
+		DBMS_OUTPUT.PUT_LINE('Invalid Email');
+	END IF;
+END proc_using_func_validation;
+/
+SHOW ERRORS;
+
+
+--function 7
+--creating function to get information festival occurs in specific year
+CREATE OR REPLACE FUNCTION func_festival(in_date IN festivals.festival_date%TYPE)RETURN NUMBER IS
+no_of_festivals NUMBER(3);
+BEGIN 
+	SELECT COUNT(*)
+	INTO no_of_festivals
+	FROM festivals f
+	WHERE f.festival_date=in_date;
+	RETURN no_of_festivals;
+END func_festival;
+/
+SHOW ERRORS;
+
+--creating procedure to execute the func_festival
+CREATE OR REPLACE PROCEDURE proc_using_func_festival(in_date IN festivals.festival_date%TYPE)IS
+no_count_festivals NUMBER(3);
+BEGIN
+no_count_festivals:=func_festival(in_date);
+DBMS_OUTPUT.PUT_LINE('Number of festival occurs in '||in_date || ' is ' ||no_count_festivals);
+END proc_using_func_festival;
+/
+SHOW ERRORS;
+
+
+
+
+
+
+	
+		
+	
